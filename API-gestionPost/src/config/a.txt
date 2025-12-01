@@ -1,0 +1,6 @@
+almacenamos configuraciones no funciones
+
+EJM:
+export const JWT_SECRET = process.env.JWT_SECRET || "secret123";
+
+config no debe generar token, esa es la funcion de utils

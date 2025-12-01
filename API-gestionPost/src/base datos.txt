@@ -1,0 +1,35 @@
+Nuestra base de datos llama gestion_post
+
+dentro de la base de datos existen 3 tablas;
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username varchar(255) NOT NULL UNIQUE,
+    password varchar(60) NOT NULL,
+    email varchar(60) NOT NULL UNIQUE,
+    firstName varchar(100) NULL,
+    lastName varchar(100) NULL,
+    role varchar(60) NOT NULL DEFAULT 'user',
+    createdAt TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updatedAt TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+);
+
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    userId INTEGER NOT NULL REFERENCES users(id),
+    content TEXT NOT NULL,
+    createdAt TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updatedAt TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+);
+
+CREATE TABLE likes (
+    id SERIAL PRIMARY KEY,
+    postId INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+    userId INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    createdAt TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    
+    //evitamos likes duplicados
+    UNIQUE (postId, userId)
+);
+
+\dt  las tablas ya estan creadas

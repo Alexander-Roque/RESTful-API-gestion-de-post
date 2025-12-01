@@ -1,0 +1,1 @@
+Guía de cómo realizar la configuración y levantamiento de la aplicación en archivo README.md
