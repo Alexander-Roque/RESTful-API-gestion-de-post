@@ -33,3 +33,6 @@ CREATE TABLE likes (
 );
 
 \dt  las tablas ya estan creadas
+
+psql -U postgres -h localhost -p 5432
+\c gestion_post
