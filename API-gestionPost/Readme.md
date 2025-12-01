@@ -6,7 +6,10 @@ pool para interactuar con mayor eficienca en la base de datos, importamos Pool d
 2. Sigue contruir las funciones para capturar los datos que se guardan
 en la base de datos
 
-1.primero debemos crear las funciones para capturar los datos guardados
-en la base datos, pero antes de eso debemos crear nuestro pool
-para interactuar con la base datos
-
+3. Creamos los get para capturar los funciones..
+<!-- 4. Luego en la carpeta data creamos el post para ejecutar la consulta
+sql -->
+4.
+app.use(express.json());
+app.use(cookieParser());
+5. pool

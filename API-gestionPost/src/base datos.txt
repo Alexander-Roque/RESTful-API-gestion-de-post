@@ -36,3 +36,23 @@ CREATE TABLE likes (
 
 psql -U postgres -h localhost -p 5432
 \c gestion_post
+
+vamos hacer una prueba 
+En mi primera tabla users colocamos 
+INSERT INTO users (username, email, firstname, lastname, role, createdAt, updatedAt)
+VALUES ('alex', 'alex@gmail.com', 'Alex', 'Gomez', 'user', NOW(), NOW());
+
+VALUES ('jose', 'jose@gmail.com', 'Jose', 'Roque', 'user', NOW(), NOW());
+
+
+en la segunda tabla posts
+INSERT INTO posts (userId, content, createdAt, updatedAt)
+VALUES (1, 'Este es mi primer post', NOW(), NOW());
+
+VALUES (2, 'Este es mi segundo post', NOW(), NOW());
+
+En mi ultima tabla likes colocamos;
+INSERT INTO likes (postId, userId, createdAt)
+VALUES (1, 1, NOW());
+
+VALUES (2, 2, NOW());
