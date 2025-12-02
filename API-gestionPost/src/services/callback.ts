@@ -1,6 +1,6 @@
-// crearemos estas dos funciones getAllPost y getPostsByUsername
+// interactuamos con la base de datos crearemos estas dos funciones getAllPost y getPostsByUsername
 
-import { query } from "../config/db.ts";
+import { query } from "../lib/db.ts";
 
 export async function getAllPost() {
     const result = await query("SELECT posts.id, users.username, posts.content, posts.createdAt, posts.updatedAt FROM posts JOIN users ON posts.userid = users.id");

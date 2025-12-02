@@ -7,8 +7,8 @@ import session from "express-session";
 import connect from "connect-pg-simple";
 import jwt from "jsonwebtoken";
 // import { pool } from "./config/db.ts";
-import { getAllPost, getPostsByUsername } from "./models/callback.ts";
-import { pool } from "./config/db.ts";
+import { getAllPost, getPostsByUsername } from "./services/callback.ts";
+import { pool } from "./lib/db.ts";
 
 
 const app = express()

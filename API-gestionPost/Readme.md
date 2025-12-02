@@ -7,9 +7,9 @@ pool para interactuar con mayor eficienca en la base de datos, importamos Pool d
 en la base de datos
 
 3. Creamos los get para capturar los funciones..
-<!-- 4. Luego en la carpeta data creamos el post para ejecutar la consulta
-sql -->
-4.
-app.use(express.json());
-app.use(cookieParser());
+
+4. No olvidemos colocar:
+app.use(express.json()) que nos permite leer el cuerpo como si fuera un objeto, recordemos que realizamos peticiones como JSON, con esto
+NODE no tendra errores y podre leerlo libremen en cualquier ruta, porque estamos usando app.use
+app.use(cookieParser()), lo utilizaremos mas tarde, esto permite a Express poder leer las cookie enviadas por el navegador
 5. pool
