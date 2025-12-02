@@ -1,6 +1,5 @@
-// import express, { NextFunction, Request, Response } from "express";
 // import path from "path";
-// import dotenv from "dotenv";
+import dotenv from "dotenv";
 import express from "express"
 import type { NextFunction, Request, Response } from "express";
 import cookieParser from "cookie-parser";
@@ -9,16 +8,21 @@ import jwt from "jsonwebtoken";
 import { getAllPost, getPostsByUsername } from "./data/post.ts";
 import { createUser, getUserByEmail } from "./data/user.ts";
 import { pool } from "./lib/db.ts";
+import { authenticateHandler } from "./middlewares/auth.ts";
 
 // dotenv.config({path:path.resolve(__dirname,".env")})
+dotenv.config()
 
 const app = express()
 const port = 5500;
-declare module "express-session"{
-    interface SessionData {
-        user: string;
-    }
+
+const jwtSecret = process.env.JWT_SECRET!;
+// codigo momentaneo
+if (!jwtSecret) {
+    console.error("JWT_SECRET no está configurado en .env");
+    process.exit(1);
 }
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -49,6 +53,41 @@ app.post("/signup", async(req,res)=>{
     }
   }
 )
+
+app.post("/login",async(req,res)=> {
+    const {email, password} = req.body;
+
+    if (!email || !password) {
+        res.status(400).json({ error: "Email y password son requeridos" });
+        return;
+    }
+    try {
+        const user = await getUserByEmail(email);
+        
+        if(!user){
+            res.status(401).send("Credenciales incorrectas");
+            return;
+        }
+
+        const isValid = await bcrypt.compare(password, user.password)
+    
+        if(!isValid){
+            res.status(401).json({ error: "Credenciales incorrectas" });
+            return;
+            // validomos el id
+        }
+        // genereramos el token
+        const payload = {userId: user.id}
+        const token = jwt.sign(payload, jwtSecret,{ expiresIn: "1m" })
+
+        res.json({ok:true, message: "Login Exitoso", data:{token}})
+        
+    } catch (error) {
+        console.error("POST /login error:", error);
+        res.status(500).json({ error: "Error al iniciar sesión" });
+    }
+
+})
 
 app.get("/", async (req, res)=> {
     // permite ver una lista de sobre todos los post echos
