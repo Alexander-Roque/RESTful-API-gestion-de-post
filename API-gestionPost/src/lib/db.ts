@@ -11,7 +11,7 @@ export const pool = new Pool ({
     port: process.env.DB_PORT
 
 })
-console.log("DB_password:", process.env.DB_PASSWORD)
+// console.log("DB_password:", process.env.DB_PASSWORD)
 
 export const query = (text: string, params?: (string | number | boolean)[]) => {
   return pool.query(text, params);
