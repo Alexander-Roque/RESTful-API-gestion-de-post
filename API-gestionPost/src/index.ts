@@ -1,7 +1,7 @@
 // import path from "path";
 import dotenv from "dotenv";
 import express from "express"
-import type { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, RequestHandler, Response } from "express";
 import cookieParser from "cookie-parser";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -10,13 +10,13 @@ import { createUser, getUserByEmail } from "./data/user.ts";
 import { pool } from "./lib/db.ts";
 import { authenticateHandler } from "./middlewares/auth.ts";
 
-// dotenv.config({path:path.resolve(__dirname,".env")})
 dotenv.config()
 
 const app = express()
 const port = 5500;
 
 const jwtSecret = process.env.JWT_SECRET!;
+
 // codigo momentaneo
 if (!jwtSecret) {
     console.error("JWT_SECRET no está configurado en .env");
@@ -99,6 +99,10 @@ app.get("/", async (req, res)=> {
         res.status(500).json({error:"no recibimos el post"})
     }
 });
+
+app.post("/posts", authenticateHandler("user"), (req: Request,res: Response)=>{
+     res.status(201).json({ ok: true });
+})
 
 app.get("/:username", async (req,res)=> {
     const {username} = req.params

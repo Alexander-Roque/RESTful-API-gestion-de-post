@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import type { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, RequestHandler, Response } from "express";
 import jwt  from "jsonwebtoken"
 
 declare global {
@@ -12,7 +12,7 @@ declare global {
 
 dotenv.config()
 
-const jwtSecret = process.env.JWT_SECRET!;
+const jwtSecret =process.env.JWT_SECRET!;
 
 interface JwtPayload {
     userId: number;
@@ -20,8 +20,8 @@ interface JwtPayload {
     exp: number;
 }
 
-export function authenticateHandler(requiredRole?:string){
-    return(req: Request, res:Response, next:NextFunction) =>{
+export function authenticateHandler (requiredRole?:string): RequestHandler{
+    const middleware: RequestHandler = (req: Request, res: Response, next: NextFunction) =>{
         try {
             const token = req.headers.authorization?.split(" ")[1];
 
@@ -39,5 +39,6 @@ export function authenticateHandler(requiredRole?:string){
     } catch {
         res.status(403).json({ error: "Token inválido o expirado" });
     }
-}
+};
+return middleware
 }
