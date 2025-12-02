@@ -10,7 +10,6 @@ import jwt from "jsonwebtoken";
 import { getAllPost, getPostsByUsername } from "./services/callback.ts";
 import { pool } from "./lib/db.ts";
 
-
 const app = express()
 const port = 5500;
 declare module "express-session"{
