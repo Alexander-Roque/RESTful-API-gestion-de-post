@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getAllPost, getPostsByUsername, createPost, getPostId, updatePost } from "./data/post.ts";
 import { createUser, getUserByEmail } from "./data/user.ts";
-import { addLike } from "./data/likes.ts";
+import { addLike, deleteLike } from "./data/likes.ts";
 import { pool } from "./lib/db.ts";
 import { authenticateHandler } from "./middlewares/auth.ts";
 import { resourceUsage } from "process";
@@ -154,10 +154,10 @@ app.patch("/posts/:id", authenticateHandler(),async (req,res)=> {
         return res.status(500).json({ message: "Error al crear el post" });
     }
 })
-app.post("/posts/:id/like", authenticateHandler(), async(req,res)=>{
+app.post("/posts/:postId/like", authenticateHandler(), async(req,res)=>{
     try {
         const userId = req.userId;
-        const postId= Number(req.params["id"])
+        const postId= Number(req.params["postId"])
 
         if (!userId) return res.status(401).json({ message: "Usuario no autenticado" });
         if(!postId) return res.status(404).json({
@@ -175,6 +175,31 @@ app.post("/posts/:id/like", authenticateHandler(), async(req,res)=>{
         const likeResult = await addLike(postId, userId)
 
         return res.status(200).json({message:"Like agregado", data: likeResult})
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error al crear el post" });
+    }
+})
+
+app.delete("/posts/:postId/like", authenticateHandler(), async(req,res)=> {
+    try {
+        const userId = req.userId;
+        const postId= Number(req.params["postId"])
+        
+        if (!userId) return res.status(401).json({ message: "Usuario no autenticado" });
+       
+        if(!postId) return res.status(404).json({
+            message: "Id no encontrado"
+        });
+        
+        const post = await getPostId(postId)
+
+        if(!post) return res.status(404).json({
+            message:"Post no encontrado"
+        });
+        
+        const deleteLik = await deleteLike(postId, userId)
+        return res.status(200).json({message:"Like agregado", data: deleteLik})
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Error al crear el post" });
