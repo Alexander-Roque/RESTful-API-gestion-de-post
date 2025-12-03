@@ -20,8 +20,8 @@ interface JwtPayload {
     exp: number;
 }
 
-export function authenticateHandler (requiredRole?:string): RequestHandler{
-    const middleware: RequestHandler = (req: Request, res: Response, next: NextFunction) =>{
+export function authenticateHandler(){
+    return (req: Request, res: Response, next: NextFunction) =>{
         try {
             const token = req.headers.authorization?.split(" ")[1];
 
@@ -35,10 +35,10 @@ export function authenticateHandler (requiredRole?:string): RequestHandler{
         req.userId = payload.userId;
 
         console.log("User ID:", payload.userId);
-        next();
+        return next();
     } catch {
-        res.status(403).json({ error: "Token inválido o expirado" });
+       res.status(403).json({ error: "Token inválido o expirado" });
+       return;
     }
 };
-return middleware
 }

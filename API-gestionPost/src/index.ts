@@ -5,7 +5,7 @@ import type { NextFunction, Request, RequestHandler, Response } from "express";
 import cookieParser from "cookie-parser";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { getAllPost, getPostsByUsername } from "./data/post.ts";
+import { getAllPost, getPostsByUsername, createPost } from "./data/post.ts";
 import { createUser, getUserByEmail } from "./data/user.ts";
 import { pool } from "./lib/db.ts";
 import { authenticateHandler } from "./middlewares/auth.ts";
@@ -100,9 +100,23 @@ app.get("/", async (req, res)=> {
     }
 });
 
-app.post("/posts", authenticateHandler("user"), (req: Request,res: Response)=>{
-     res.status(201).json({ ok: true });
-})
+app.post("/posts", authenticateHandler(), async (req,res)=>{
+    try {
+        const userId = req.userId;
+        const {content} = req.body;
+
+        if (!userId) return res.status(401).json({ message: "Usuario no autenticado" });
+        if (!content) return res.status(400).json({ message: "Debes enviar 'content'" });
+
+        const post = await createPost(userId, content);
+        return res.status(201).json({message:"post creado", post})
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error al crear el post" });
+    }
+}
+)
 
 app.get("/:username", async (req,res)=> {
     const {username} = req.params
