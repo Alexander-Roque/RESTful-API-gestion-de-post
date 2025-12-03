@@ -5,10 +5,11 @@ import type { NextFunction, Request, RequestHandler, Response } from "express";
 import cookieParser from "cookie-parser";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { getAllPost, getPostsByUsername, createPost } from "./data/post.ts";
+import { getAllPost, getPostsByUsername, createPost, getPostId, updatePost } from "./data/post.ts";
 import { createUser, getUserByEmail } from "./data/user.ts";
 import { pool } from "./lib/db.ts";
 import { authenticateHandler } from "./middlewares/auth.ts";
+import { resourceUsage } from "process";
 
 dotenv.config()
 
@@ -116,8 +117,43 @@ app.post("/posts", authenticateHandler(), async (req,res)=>{
         return res.status(500).json({ message: "Error al crear el post" });
     }
 }
-)
+);
 
+app.patch("/posts/:id", authenticateHandler(),async (req,res)=> {
+    try {
+        // traemos el userId, content y id del post para verificar el acceso y funcionamiento de la pagina
+        const userId = req.userId;
+        const {content} = req.body;
+        const postId= Number(req.params["id"])
+
+        // por si hay errores
+        if (!userId) return res.status(401).json({ message: "Usuario no autenticado" });
+        if (!content) return res.status(400).json({ message: "Debes enviar 'content'" });
+        if(!postId) return res.status(404).json({
+            message: "Id no encontrado"
+        })
+
+        // ahora traemos el post que deseamos actualizar por medio del id que pasaramos al params
+        const post = await getPostId(postId)
+
+        // verificamos si es el correcto o si existe
+        if(!post) return res.status(404).json({
+            message:"Post no encontrado"
+        })
+        console.log(post)
+        if(post.userid !== userId){
+            return res.status(403).json({ message: "No autorizado para editar este post" });
+        }
+
+        // ya podemos actualizar el post que deseamos
+        const update = await updatePost(postId, content)
+        return res.status(200).json({message:"Post actualizado", post: update})
+
+    } catch (error) {
+         console.error(error);
+        return res.status(500).json({ message: "Error al crear el post" });
+    }
+})
 app.get("/:username", async (req,res)=> {
     const {username} = req.params
     try {
