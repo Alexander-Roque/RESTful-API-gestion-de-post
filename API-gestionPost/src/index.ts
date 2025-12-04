@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getAllPost, getPostsByUsername, createPost, getPostId, updatePost } from "./data/post.ts";
-import { createUser, getUserByEmail } from "./data/user.ts";
+import { createUser, getUser, getUserByEmail } from "./data/user.ts";
 import { addLike, deleteLike } from "./data/likes.ts";
 import { pool } from "./lib/db.ts";
 import { authenticateHandler } from "./middlewares/auth.ts";
@@ -102,6 +102,23 @@ app.get("/", async (req, res)=> {
     }
 });
 
+app.get("/me", authenticateHandler(), async (req,res)=>{
+    try {
+        const userId = req.userId;
+
+         if (!userId) return res.status(401).json({ message: "Usuario no autenticado" });
+
+         const user = await getUser(userId);
+         if (!user) return res.status(404).json({message: "El usuario no encontrado"})
+         
+         return res.status(200).json({message:"user encontrado", data:user})
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error al buscar el user" });
+    }
+})
+
+
 app.post("/posts", authenticateHandler(), async (req,res)=>{
     try {
         const userId = req.userId;
@@ -111,7 +128,7 @@ app.post("/posts", authenticateHandler(), async (req,res)=>{
         if (!content) return res.status(400).json({ message: "Debes enviar 'content'" });
 
         const post = await createPost(userId, content);
-        return res.status(201).json({message:"post creado", post})
+        return res.status(201).json({message:"post creado", data:post})
 
     } catch (error) {
         console.error(error);

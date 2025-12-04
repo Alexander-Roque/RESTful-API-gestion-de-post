@@ -12,3 +12,7 @@ export async function createUser(email: string, hashedPassword: string, username
     )
   ).rows[0];
 }
+
+export async function getUser(userId:number) {
+  return ((await query("SELECT id, username, email, firstname, lastName, role, createdAt, updatedAt FROM users WHERE id = $1",[userId])).rows[0])
+}
