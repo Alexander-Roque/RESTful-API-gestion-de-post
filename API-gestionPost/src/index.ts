@@ -1,16 +1,17 @@
 // import path from "path";
 import dotenv from "dotenv";
 import express from "express"
-import type { NextFunction, Request, RequestHandler, Response } from "express";
+// import type { NextFunction, Request, RequestHandler, Response } from "express";
 import cookieParser from "cookie-parser";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getAllPost, getPostsByUsername, createPost, getPostId, updatePost } from "./data/post.ts";
-import { createUser, getUser, getUserByEmail, updateUser } from "./data/user.ts";
+import { createUser, deleteUser, getAdmins, getUser, getUserByEmail, updateUser } from "./data/user.ts";
 import { addLike, deleteLike } from "./data/likes.ts";
 import { pool } from "./lib/db.ts";
 import { authenticateHandler } from "./middlewares/auth.ts";
-import { resourceUsage } from "process";
+// import { resourceUsage } from "process";
+// import { addIssueToContext } from "zod/v3";
 
 dotenv.config()
 
@@ -29,7 +30,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.post("/signup", async(req,res)=>{
-    const {email, password, username, firstname, lastname} = req.body
+    const {email, password, username, firstname, lastname, role} = req.body
 
     // validamos si email y password existen
     if(!email || !password || !username){
@@ -46,7 +47,7 @@ app.post("/signup", async(req,res)=>{
     }
     const costFactor = 10
     const hashedPassword = await bcrypt.hash(password,costFactor)
-    const newUser = await createUser(email,hashedPassword, username, firstname, lastname)
+    const newUser = await createUser(email,hashedPassword, username, firstname, lastname, role)
 
     res.status(201).json(newUser)
     } catch (error) {
@@ -79,7 +80,7 @@ app.post("/login",async(req,res)=> {
             // validomos el id
         }
         // genereramos el token
-        const payload = {userId: user.id}
+        const payload = {userId: user.id, role: user.role}
         const token = jwt.sign(payload, jwtSecret,{ expiresIn: "1m" })
 
         res.json({ok:true, message: "Login Exitoso", data:{token}})
@@ -88,7 +89,6 @@ app.post("/login",async(req,res)=> {
         console.error("POST /login error:", error);
         res.status(500).json({ error: "Error al iniciar sesión" });
     }
-
 })
 
 app.get("/", async (req, res)=> {
@@ -113,6 +113,25 @@ app.get("/me", authenticateHandler(), async (req,res)=>{
          
          return res.status(200).json({message:"user encontrado", data:user})
     } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error al buscar el user" });
+    }
+})
+app.get("/admins", authenticateHandler("admin"),async (req,res)=>{
+    try {
+        const userId = req.userId;
+        if (!userId) return res.status(401).json({ message: "Usuario no autenticado" });
+
+        // si tiene rol admin
+        const current = await getUser(userId);
+        if (!current) return res.status(404).json({ message: "Usuario no encontrado" });
+        if (current.role !== "admin") return res.status(403).json({ message: "No autorizado" });
+
+        const admins = await getAdmins()
+         if (!admins) return res.status(404).json({message: "El usuario no encontrado"})
+         
+         return res.status(200).json({message:"user encontrado", data:admins})
+    }catch(error) {
         console.error(error);
         return res.status(500).json({ message: "Error al buscar el user" });
     }
@@ -147,6 +166,23 @@ app.patch("/me", authenticateHandler(), async(req,res)=> {
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Error al buscar el user" });
+    }
+})
+
+app.delete("/me",authenticateHandler(),async(req,res)=>{
+    try {
+        const userId = req.userId;
+
+        if (!userId) return res.status(401).json({ message: "Usuario no autenticado" });
+
+        const deletedCount = await deleteUser(userId)
+
+        if(!deletedCount) return res.status(404).json({message: "Usario no encontrado"})
+
+        res.json({ok:true})
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error al eliminar el usuario" });
     }
 })
 
