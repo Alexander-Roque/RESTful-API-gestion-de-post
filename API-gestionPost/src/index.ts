@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getAllPost, getPostsByUsername, createPost, getPostId, updatePost } from "./data/post.ts";
-import { createUser, getUser, getUserByEmail } from "./data/user.ts";
+import { createUser, getUser, getUserByEmail, updateUser } from "./data/user.ts";
 import { addLike, deleteLike } from "./data/likes.ts";
 import { pool } from "./lib/db.ts";
 import { authenticateHandler } from "./middlewares/auth.ts";
@@ -118,6 +118,37 @@ app.get("/me", authenticateHandler(), async (req,res)=>{
     }
 })
 
+app.patch("/me", authenticateHandler(), async(req,res)=> {
+    try {
+        const userId = req.userId;
+        const {email, firstname, lastname} = req.body;
+
+         if (!userId) return res.status(401).json({ message: "Usuario no autenticado" });
+
+        //  leemos el usuario actual para realizar la edicion
+        const currentUser = await getUser(userId)
+        if (!currentUser) return res.status(404).json({message: "Usuario no encontrado"})
+
+        // creamos esta funcion para cambiar y validar el correo y evitar romper signup y login
+        if(email && email !==currentUser.email){
+            const existing = await getUserByEmail(email);
+            if(existing && existing.id !== userId) {
+                return res.status(400).json({ message: "El email ya está en uso" });
+            }
+        }
+        
+        // preparemos los valores para actualizar
+        const emailToUpdate = email ?? currentUser.email;
+        const firstNameToUpdate = firstname ?? currentUser.firstname
+        const lastNameToUpdate = lastname ?? currentUser.lastname
+
+        const update = await updateUser(userId, emailToUpdate, firstNameToUpdate, lastNameToUpdate)
+        return res.status(200).json({message:"perfil actualizado", data:update})
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error al buscar el user" });
+    }
+})
 
 app.post("/posts", authenticateHandler(), async (req,res)=>{
     try {

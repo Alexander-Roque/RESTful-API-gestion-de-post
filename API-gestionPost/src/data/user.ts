@@ -14,5 +14,9 @@ export async function createUser(email: string, hashedPassword: string, username
 }
 
 export async function getUser(userId:number) {
-  return ((await query("SELECT id, username, email, firstname, lastName, role, createdAt, updatedAt FROM users WHERE id = $1",[userId])).rows[0])
+  return ((await query("SELECT id, username, email, firstname, lastname, role, createdAt, updatedAt FROM users WHERE id = $1",[userId])).rows[0])
+}
+
+export async function updateUser(userId:number,email:string, firstName:string, lastName:string) {
+  return ((await query("UPDATE users SET email = $2, firstname = $3, lastName = $4 WHERE id = $1 RETURNING id, username, email, firstname, lastname, role, createdAt, updatedAt",[userId, email, firstName, lastName])).rows[0])
 }
