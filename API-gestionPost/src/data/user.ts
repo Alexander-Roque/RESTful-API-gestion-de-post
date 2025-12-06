@@ -25,9 +25,6 @@ export async function updateUser(userId:number,email:string, firstname:string, l
   return ((await query("UPDATE users SET email = $2, firstname = $3, lastName = $4 WHERE id = $1 RETURNING id, username, email, firstname, lastname, role, createdAt, updatedAt",[userId, email, firstname, lastname])).rows[0])
 }
 
-// export async function deleteUser(userId:number) {
-//   return((await query("DELETE FROM users WHERE id = $1",[userId])).rows[0])
-// }
 export async function deleteUser (userId:number) {
   const client = await pool.connect();
   try {

@@ -1,7 +1,5 @@
-// import path from "path";
 import dotenv from "dotenv";
 import express from "express"
-// import type { NextFunction, Request, RequestHandler, Response } from "express";
 import cookieParser from "cookie-parser";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -10,8 +8,7 @@ import { createUser, deleteUser, getAdmins, getUser, getUserByEmail, updateUser 
 import { addLike, deleteLike } from "./data/likes.ts";
 import { pool } from "./lib/db.ts";
 import { authenticateHandler } from "./middlewares/auth.ts";
-// import { resourceUsage } from "process";
-// import { addIssueToContext } from "zod/v3";
+
 
 dotenv.config()
 

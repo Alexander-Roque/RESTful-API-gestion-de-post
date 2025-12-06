@@ -37,6 +37,8 @@ CREATE TABLE likes (
 psql -U postgres -h localhost -p 5432
 \c gestion_post
 
+pg_dump -U postgres -d gestion_post > backup.sql
+
 vamos hacer una prueba 
 En mi primera tabla users colocamos 
 INSERT INTO users (username, email, firstname, lastname, role, createdAt, updatedAt)

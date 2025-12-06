@@ -1,0 +1,396 @@
+type: collection.insomnia.rest/5.0
+name: Prueba API gestion de Posts
+meta:
+  id: wrk_4a16ef520ca84048bf6b2702f66b49b2
+  created: 1764627986127
+  modified: 1764627986127
+  description: ""
+collection:
+  - name: Visualizacion de Post
+    meta:
+      id: fld_38fe7cd4c0f04dfa9fb38d7bfee77d42
+      created: 1765045158385
+      modified: 1765045158385
+      sortKey: -1765045158385
+      description: ""
+    children:
+      - url: http://localhost:5500/
+        name: All post
+        meta:
+          id: req_51a3219a5a914fbc8efdedfdcd9077cc
+          created: 1764627992984
+          modified: 1765045169005
+          isPrivate: false
+          description: ""
+          sortKey: -1765045168953
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.3.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:5500/alex
+        name: Ver post user
+        meta:
+          id: req_6ead41361cb14ed7a0bf4f0ee81d9ff2
+          created: 1764627994996
+          modified: 1765045191965
+          isPrivate: false
+          description: ""
+          sortKey: -1765045169053
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.3.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Creacion de usuario
+    meta:
+      id: fld_55eee9ba5b384e5aa15e55c518b7643d
+      created: 1765045207915
+      modified: 1765045250241
+      sortKey: -1765045207915
+      description: ""
+    children:
+      - url: http://localhost:5500/signup
+        name: Signup
+        meta:
+          id: req_abd3939d3a984a1bbc7f8a9c467ef7dc
+          created: 1764694899890
+          modified: 1765045245705
+          isPrivate: false
+          description: ""
+          sortKey: -1765045245648
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email":"pinguinoMaster@gmail.com",
+            	"password":"12345",
+            	"username": "PinguiMayor",
+            	"firstname":"Pinguio",
+            	"role":"admin"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:5500/login
+        name: Login
+        meta:
+          id: req_2b4bb339acd54c1090dd6c9e777c20ef
+          created: 1764712833917
+          modified: 1765045251187
+          isPrivate: false
+          description: ""
+          sortKey: -1765045245748
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email":"pinguinoMaster@gmail.com",
+            	"password":"12345"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Interacción de Usuarios Registrados
+    meta:
+      id: fld_cfcbe9f28a3f432e828350424920ad1d
+      created: 1765045264953
+      modified: 1765045343592
+      sortKey: -1765045264953
+      description: ""
+    children:
+      - url: http://localhost:5500/posts
+        name: Posts
+        meta:
+          id: req_d9018e5fa4e94755adbaf7e11a273b9a
+          created: 1764718397877
+          modified: 1765045274515
+          isPrivate: false
+          description: ""
+          sortKey: -1765045274471
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"content":"Los pinguinos son superiores"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTc2NDc4MzA4OCwiZXhwIjoxNzY0NzgzMTQ4fQ.blE_i9xXgTCeFsl1LsKUiYuMS42Oj-SIjWuYO9Ap5Xo
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:5500/posts/4
+        name: Editar posts existente
+        meta:
+          id: req_f43af56967864834ab603cbfb9b022db
+          created: 1764783023431
+          modified: 1765045340097
+          isPrivate: false
+          description: ""
+          sortKey: -1765045274571
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"content":"Los capibaras son superiores"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTc2NDc4MzkwOSwiZXhwIjoxNzY0NzgzOTY5fQ.ypBvqVlym0dfcL7dySKk6AE-ux_LCOwBHZgPFbVGIbw
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:5500/posts/4/like
+        name: Like
+        meta:
+          id: req_30046f2960904a558d75b1c18e1984db
+          created: 1764800417076
+          modified: 1765045317605
+          isPrivate: false
+          description: ""
+          sortKey: -1765045274521
+        method: POST
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImlhdCI6MTc2NDgwNDQ5NywiZXhwIjoxNzY0ODA0NTU3fQ.oOSN7LDTc4zJaTyi6saDA5-U9ysMFmiUOGBgY727ozU
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:5500/posts/4/like
+        name: Delete like
+        meta:
+          id: req_9f889c8bdd264a60ab98108f9ed64392
+          created: 1764804007879
+          modified: 1765045327873
+          isPrivate: false
+          description: ""
+          sortKey: -1765045274546
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImlhdCI6MTc2NDgwNDQ5NywiZXhwIjoxNzY0ODA0NTU3fQ.oOSN7LDTc4zJaTyi6saDA5-U9ysMFmiUOGBgY727ozU
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Gestion de perfil
+    meta:
+      id: fld_a012c291508344a498755d0c2a311c21
+      created: 1765045359858
+      modified: 1765045359858
+      sortKey: -1765045359858
+      description: ""
+    children:
+      - url: http://localhost:5500/me
+        name: Me
+        meta:
+          id: req_aab7651aec79418e85ae536af380cc57
+          created: 1764869134579
+          modified: 1765045372029
+          isPrivate: false
+          description: ""
+          sortKey: -1765045371962
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwLCJyb2xlSWQiOiJhZG1pbiIsImlhdCI6MTc2NDk1NTQ1MSwiZXhwIjoxNzY0OTU1NTExfQ.SY2Zu4RCdsUmxi0DfdwtcEuZY33X-e1_j9Uydqt_JBY
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:5500/me
+        name: Editar usuario
+        meta:
+          id: req_d93c268d7eb14620b2c0207066f7ab7c
+          created: 1764882012325
+          modified: 1765045403653
+          isPrivate: false
+          description: ""
+          sortKey: -1765045372062
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email":"fortnite@gmail.com",
+            	"firstname": "Alex",
+            	"lastname": "Jose"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImlhdCI6MTc2NDg4MjI1MiwiZXhwIjoxNzY0ODgyMzEyfQ.ZHsBuHhvQaQw4nj5Gt7SKiMojE6OJKtPEx0jno5scdY
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:5500/me
+        name: Eliminar usuario
+        meta:
+          id: req_953855d5d10e40a3b46f5c683d4a0816
+          created: 1764951223652
+          modified: 1765045405409
+          isPrivate: false
+          description: ""
+          sortKey: -1765045372162
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsInJvbGVJZCI6InVzZXIiLCJpYXQiOjE3NjQ5NTQzNTYsImV4cCI6MTc2NDk1NDQxNn0.GcOv0Pcx9_-T8QRirv77_jPPNHCgk-1Q0A3mPlAOtN4
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:5500/admins
+        name: Admins
+        meta:
+          id: req_9226fd11f0a648e08bd6d3df79e76ab0
+          created: 1764954843817
+          modified: 1765045408008
+          isPrivate: false
+          description: ""
+          sortKey: -1765045372012
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjQ5NTU4NjgsImV4cCI6MTc2NDk1NTkyOH0.0ZD4Q4mJQ8GbyJOJigs6WF5WdpqsuxZrVDcME6t1pxQ
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_a0924bd75f13c6d428d7fcdf918e9313affcfe16
+    created: 1764627986173
+    modified: 1764627986173
+environments:
+  name: Base Environment
+  meta:
+    id: env_a0924bd75f13c6d428d7fcdf918e9313affcfe16
+    created: 1764627986138
+    modified: 1764627986138
+    isPrivate: false
