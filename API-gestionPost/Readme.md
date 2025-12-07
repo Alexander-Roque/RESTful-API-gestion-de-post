@@ -1,15 +1,43 @@
-Guía de cómo realizar la configuración y levantamiento de la aplicación en archivo README.md
+RESTful API para Gestión de Posts
 
-1. Crea en mi config el archivo db para crear nuestra configuracion
-pool para interactuar con mayor eficienca en la base de datos, importamos Pool de pg.
+-Prerequisitos
+.Node.js 18+
+.PostgreSQL database
+.npm or yarn
 
-2. Sigue contruir las funciones para capturar los datos que se guardan
-en la base de datos
+-Instalaciones
 
-3. Creamos los get para capturar los funciones..
+npm install
+//este comando instalara todas las dependencias utilizadas
 
-4. No olvidemos colocar:
-app.use(express.json()) que nos permite leer el cuerpo como si fuera un objeto, recordemos que realizamos peticiones como JSON, con esto
-NODE no tendra errores y podre leerlo libremen en cualquier ruta, porque estamos usando app.use
-app.use(cookieParser()), lo utilizaremos mas tarde, esto permite a Express poder leer las cookie enviadas por el navegador
-5. pool
+-Editar .env con la configuracion de tu base de datos
+DB_USER
+DB_PASSWORD
+DB_NAME=gestion_post
+DB_PORT=5432
+JWT_SECRET=ultra-secreto
+
+DATA SETUP
+1. En la carpeta scripts, esta la base de datos backup.sql
+2. Si tienes window Ubuntu, lleva el archivo entre a home y dentro
+de tu usuario colocar el archivo sql donde lo desea
+3. Para abrir lo ingrese el codigo; psql -U postgres -h localhost -p 5432 luego \c gestion_post
+
+Insomnia Demostracion
+1. Dentro de la carpeta scripts hay un archivo insomnia para levantarlo tienes que hacer estos simples pasos:
+2. Colocalo en el escritorio de tu computadora o en el lugar que desees.
+3. Entras a insomnia, haces click en el boton import que esta al lado del boton create
+4. Subes el archivo que deseas importar, lo escaneas y lo importas
+
+Para correr nuestro proyecto entramos en la consola y colocamos
+npm run dev
+
+La estructura del proyecto backend es:
+
+src/
+├── data/ 
+├── lib/             
+├── middlewares/        
+├── types/
+├── scripts/            
+├── index.ts      
